@@ -385,181 +385,63 @@ public class JsonWriter {
 	private JsonWriter() {
 	}
 
+	
 	/**
-	 * Writes the inverted index as a pretty JSON object.
-	 * The method uses generic notation, allowing it to work with any map of maps
-	 * structure.
-	 *
-	 * @param invertedIndex the inverted index to write
-	 * @param writer        the writer to use
-	 * @param indent        the initial indent level; the first bracket is not
-	 *                      indented,
-	 *                      inner elements are indented by one, and the last bracket
-	 *                      is
-	 *                      indented at the initial indentation level
-	 * @throws IOException if an IO error occurs
-	 */
-	public static void writeInverted(
-			Map<String, ? extends Map<String, ? extends Collection<? extends Number>>> invertedIndex, Writer writer,
-			int indent)
-			throws IOException {
-		// create iterator
-		var iterator = invertedIndex.entrySet().iterator();
-		// write beginning curly brace
-		writer.write("{");
-		if (iterator.hasNext()) {
-			writer.write("\n");
-			// store the entry
-			var firstEntry = iterator.next();
-			// write in the keys with quotes
-			writeQuote(firstEntry.getKey(), writer, indent);
-			writer.write(": ");
-			// write in the array of values
-			writeObjectArrays(firstEntry.getValue(), writer, indent);
-		}
-		// use the iterator to go through each entry in the elements collection and
-		// write them
-		while (iterator.hasNext()) {
-			writer.write(",\n");
-			// store the entry
-			var nextEntry = iterator.next();
-			// write in the keys with quotes
-			writeQuote(nextEntry.getKey(), writer, indent);
-			writer.write(": ");
-			// write in the array of values
-			writeObjectArrays(nextEntry.getValue(), writer, indent);
-		}
-		writeIndent(writer, indent);
-		// closing curly brace
-		writer.write("\n}");
-	}
+     * Writes the provided map as a pretty JSON object.
+     * The method uses generic notation, allowing it to work with any map structure.
+     *
+     * @param map    the map to write
+     * @param writer the writer to use
+     * @param indent the initial indent level; the first bracket is not indented,
+     *               inner elements are indented by one, and the last bracket is
+     *               indented at the initial indentation level
+     * @throws IOException if an IO error occurs
+     */
+    public static void writeInverted(Map<String, String> map, Writer writer, int indent) throws IOException {
+        // create iterator
+        var iterator = map.entrySet().iterator();
+        // write beginning curly brace
+        writer.write("{");
+        if (iterator.hasNext()) {
+            writer.write("\n");
+            // store the entry
+            var firstEntry = iterator.next();
+            // write in the keys with quotes
+            writeQuote(firstEntry.getKey(), writer, indent);
+            writer.write(": ");
+            // write in the value with quotes
+            writeQuote(firstEntry.getValue(), writer, 0);
+        }
+        // use the iterator to go through each entry in the elements collection and
+        // write them
+        while (iterator.hasNext()) {
+            writer.write(",\n");
+            // store the entry
+            var nextEntry = iterator.next();
+            // write in the keys with quotes
+            writeQuote(nextEntry.getKey(), writer, indent);
+            writer.write(": ");
+            // write in the value with quotes
+            writeQuote(nextEntry.getValue(), writer, 0);
+        }
+        writer.write("\n");
+        // write closing curly brace
+        writeIndent(writer, indent - 1);
+        writer.write("}");
+    }
 
-	/**
-	 * Writes the provided inverted index to a file in JSON format.
-	 *
-	 * @param invertedIndex the inverted index to write
-	 * @param outputPath    the path of the file to write to
-	 * @throws IOException if an I/O error occurs
-	 */
-	public static void writeInverted(
-			Map<String, ? extends Map<String, ? extends Collection<? extends Number>>> invertedIndex, Path outputPath)
-			throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
-			// use the writeInverted method to write the inverted index
-			writeInverted(invertedIndex, writer, 1);
-		}
-	}
-
-	/**
-	 * Writes the search results to a file in JSON format.
-	 *
-	 * @param queryMap the map containing the query keys and their corresponding
-	 *                 search results
-	 * @param path     the path to the output file
-	 * @param writer   the writer used for output
-	 * @param indent   the indentation level for the current context
-	 * @throws IOException if an I/O error occurs during writing
-	 */
-	public static void writeSearchResults(Map<String, ? extends Collection<InvertedIndex.SearchResult>> queryMap,
-			Path path, Writer writer, int indent)
-			throws IOException {
-		writer.write("{");
-		// Create an iterator for the queryMap
-		var iterator = queryMap.entrySet().iterator();
-		// write the first key-value pair
-		if (iterator.hasNext()) {
-			writer.write("\n");
-			Entry<String, ? extends Collection<InvertedIndex.SearchResult>> firstEntry = iterator.next();
-			writeQuote(firstEntry.getKey(), writer, 1);
-			writer.write(": ");
-			writeSearchResultArray(firstEntry.getValue(), writer, 1);
-		}
-		// Loop through the queryMap
-		while (iterator.hasNext()) {
-			writer.write(",\n");
-			// Get the next entry
-			Entry<String, ? extends Collection<InvertedIndex.SearchResult>> entry = iterator.next();
-			// Write the key and value
-			writeQuote(entry.getKey(), writer, 1);
-			writer.write(": ");
-			writeSearchResultArray(entry.getValue(), writer, 1);
-		}
-		writer.write("\n}"); // End of the JSON object
-	}
-
-	/**
-	 * Convenience method to write to file
-	 *
-	 * @param queryMap the map containing the query keys and their corresponding
-	 *                 search results
-	 * @param path     the path to the output file
-	 */
-	public static void writeSearchResults(Map<String, ? extends Collection<InvertedIndex.SearchResult>> queryMap,
-			Path path) {
-		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-			writeSearchResults(queryMap, path, writer, 1);
-		} catch (IOException e) {
-			System.out.println("Error writing search results to file: " + path);
-		}
-	}
-
-	/**
-	 * Writes an array of search results in JSON format.
-	 *
-	 * @param results the TreeSet of SearchResult objects to be written
-	 * @param writer  the writer used for output
-	 * @param indent  the indentation level for the current context
-	 * @throws IOException if an I/O error occurs during writing
-	 */
-	public static void writeSearchResultArray(Collection<InvertedIndex.SearchResult> results, Writer writer, int indent)
-			throws IOException {
-		writer.write("[");
-		// Create an iterator for the results
-		var iterator = results.iterator();
-		if (iterator.hasNext()) {
-			writer.write("\n");
-			writeSearchResult(iterator.next(), writer, indent + 1);
-		}
-		// Loop through the results
-		while (iterator.hasNext()) {
-			writer.write(",\n");
-			// Write the SearchResult object
-			writeSearchResult(iterator.next(), writer, indent + 1);
-		}
-		writer.write("\n");
-		writeIndent(writer, indent);
-		writer.write("]"); // Close the array
-	}
-
-	/**
-	 * Writes a single search result in JSON format.
-	 *
-	 * @param result the SearchResult object to be written
-	 * @param writer the writer used for output
-	 * @param indent the indentation level for the current context
-	 * @throws IOException if an I/O error occurs during writing
-	 */
-	private static void writeSearchResult(InvertedIndex.SearchResult result, Writer writer, int indent)
-			throws IOException {
-		writeIndent(writer, indent);
-		writer.write("{\n");
-
-		// write count key-value pair
-		writeIndent(writer, indent + 1);
-		writer.write(String.format("\"count\": %d,\n", result.getMatches()));
-
-		// write score key-value pair
-		String formattedScore = FORMATTER.format(Double.parseDouble(result.getScore()));
-		writeIndent(writer, indent + 1);
-		writer.write(String.format("\"score\": %s,\n", formattedScore));
-
-		// write where key-value pair (last, no comma)
-		writeIndent(writer, indent + 1);
-		writer.write(String.format("\"where\": \"%s\"\n", result.getLocation()));
-
-		// close JSON object
-		writeIndent(writer, indent);
-		writer.write("}");
-	}
+    /**
+     * Writes the provided map to a file in JSON format.
+     *
+     * @param map        the map to write
+     * @param outputPath the path of the file to write to
+     * @throws IOException if an I/O error occurs
+     */
+    public static void writeInverted(Map<String, String> map, Path outputPath) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
+            // use the writeInverted method to write the map
+            writeInverted(map, writer, 1);
+        }
+    }
 
 }

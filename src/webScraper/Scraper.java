@@ -6,69 +6,63 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 
 public class Scraper {
-	private final InvertedIndex index;
+    private final InvertedIndex index;
 
-	public Scraper(InvertedIndex index) {
-		this.index = index;
-	}
+    public Scraper(InvertedIndex index) {
+        this.index = index;
+    }
 
-	/**
-	 * Builds the index using a single-threaded approach from the given text path.
-	 *
-	 * @param textPath the path to the text files to index
-	 */
-	public void buildIndex(Path textPath) {
-		InvertedIndexBuilder builder = new InvertedIndexBuilder(index);
+    /**
+     * Builds the index using a single-threaded approach for web crawling from the
+     * given seed URL.
+     *
+     * @param seedUrl    the seed URL to start web crawling from
+     * @param totalPages the total number of pages to crawl
+     */
+    public void buildWebCrawl(URI seedUrl, int totalPages) {
+        System.out.println("Starting web crawling from seed URL: " + seedUrl);
 
-		try {
-			builder.processPath(textPath);
-		} catch (IOException e) {
-			System.err.println("Unable to process text files at: " + textPath);
-		} catch (Exception e) {
-			System.err.println("Unable to build index from text files at: " + textPath);
-		}
-	}
+        WebCrawler.crawl(seedUrl, index, totalPages);
 
-	/**
-	 * Builds the index using a single-threaded approach for web crawling from the
-	 * given seed URL.
-	 *
-	 * @param seedUrl    the seed URL to start web crawling from
-	 * @param totalPages the total number of pages to crawl
-	 */
-	public void buildWebCrawl(URI seedUrl, int totalPages) {
-		System.out.println("Starting web crawling from seed URL: " + seedUrl);
+        System.out.println(index.toString());
+    }
 
-			WebCrawler crawler = new WebCrawler();
+    /**
+     * Writes the index to the specified path.
+     *
+     * @param indexPath the path to write the index
+     */
+    public void writeIndex(Path indexPath) {
+        try {
+            index.writeInverted(indexPath);
+        } catch (IOException e) {
+            System.err.println("Unable to write index to file: " + indexPath);
+        }
+    }
 
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.err.println("Usage: java webScraper.Scraper <URI> <totalPages>");
+            System.exit(1);
+        }
 
-	}
+        try {
+            URI seedUrl = new URI(args[0]);
+            int totalPages = Integer.parseInt(args[1]);
 
-	/**
-	 * Writes the word counts to the specified path.
-	 *
-	 * @param countsPath the path to write the word counts
-	 */
-	public void writeCounts(Path countsPath) {
-		try {
-			index.writeCounts(countsPath);
+            InvertedIndex index = new InvertedIndex();
+            Scraper scraper = new Scraper(index);
 
-		} catch (IOException e) {
+            scraper.buildWebCrawl(seedUrl, totalPages);
 
-		}
-	}
+            // Optionally, write the index to a file
+            Path indexPath = Path.of("index.json");
+            scraper.writeIndex(indexPath);
 
-	/**
-	 * Writes the index to the specified path.
-	 *
-	 * @param indexPath the path to write the index
-	 */
-	public void writeIndex(Path indexPath) {
-		try {
-			index.writeIndex(indexPath);
-
-		} catch (IOException e) {
-
-		}
-	}
+        } catch (URISyntaxException e) {
+            System.err.println("Invalid URI: " + args[0]);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid number for totalPages: " + args[1]);
+        }
+    }
 }

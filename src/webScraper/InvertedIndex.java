@@ -48,9 +48,25 @@ public class InvertedIndex {
      */
     public void indexPage(String html, URI uri) {
         // Clean HTML content
-        String cleanHtml = HtmlCleaner.stripHtml(html);
+
+    	String recipe = HtmlCleaner.extractRecipe(html);
+    	
+        String cleanRecipe = HtmlCleaner.stripHtml(html);
+        
+        String title = HtmlCleaner.extractTitle(html);
+        
+        String info = HtmlCleaner.extractInfo(html);
+        
+        String ingredients = HtmlCleaner.extractIngredients(html);
+        
+        String steps = HtmlCleaner.extractSteps(html);
+        
+        
+        String outputString = "\n" + "Title: " + title + "\n" + info + "\n" + ingredients + "\n" + steps ;
+        
+
 
         // Store the cleaned HTML content for the URL
-        invertedIndex.put(uri.toString(), cleanHtml);
+        invertedIndex.put(uri.toString(), outputString);
     }
 }

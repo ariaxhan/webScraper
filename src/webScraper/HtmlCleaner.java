@@ -210,43 +210,177 @@ public class HtmlCleaner {
 		html = stripEntities(html);
 		return html;
 	}
-
 	
-	 public static void main(String[] args) {
-	        String html = """
-	                <!doctype html>
-	                <html lang="en">
-	                <head>
-	                    <meta charset="utf-8">
-	                    <title>Hello, world!</title>
-	                </head>
-	                <body>
-	                    <style>
-	                        body {
-	                            font-size: 12pt;
-	                        }
-	                    </style>
+	/**
+	 * Finds all recipes with the tag <div id="wprm-recipe-container-9068" ... <span class="cp-load-after-post"></span>
+	 * Recipes should be between the tags. 
 
-	                    <p>Hello, <strong>world</strong>!</p>
-	                    <p>&copy; 2023</p>
-	                    <a href="https://example.com">Example</a>
-	                    <a href="https://anotherexample.com">Another Example</a>
-	                </body>
-	                </html>
-	                """;
+	 */
+	
+	public static String extractRecipe(String html) {
+		// The regex to capture the content between <div id="wprm-recipe-container-9068"> and <span class="cp-load-after-post"></span>
+		String regex = "(?s)<div\\s+id=\"wprm-recipe-container-9068\".*?>(.*?)<span\\s+class=\"cp-load-after-post\"></span>";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(html);
+		
+		StringBuilder result = new StringBuilder();
+		
+		while (matcher.find()) {
+			result.append(matcher.group(1));
+		}
+		
+		return result.toString();
+	}
+	
+	/**
+	 * Extracts the title from a div tag with class "view3_top_tit".
+	 *
+	 * @param html valid HTML text
+	 * @return the title text if found, otherwise an empty string
+	 */
+	public static String extractTitle(String html) {
+		String regex = "<div\\s+class=\"view3_top_tit\">(.*?)</div>";
+		Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(html);
 
-	        System.out.println("---------------------");
-	        System.out.println(html);
-	        System.out.println("---------------------");
+		if (matcher.find()) {
+			return matcher.group(1).trim();
+		}
 
-	        System.out.println(stripHtml(html));
-	        System.out.println("---------------------");
+		return "";
+	}
+	
+	  /**
+     * Extracts the text sections with numbers from a div tag with class "view3_top_info".
+     *
+     * @param html valid HTML text
+     * @return the extracted text if found, otherwise an empty string
+     */
+    public static String extractInfo(String html) {
+        String regex = "<div\\s+class=\"view3_top_info\">(.*?)</div>";
+        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(html);
 
-	        List<String> links = extractHyperlinks(html);
-	        for (String link : links) {
-	            System.out.println(link);
-	        }
-	        System.out.println("---------------------");
-	    }
+        if (matcher.find()) {
+            // Extract the content inside the div
+            String content = matcher.group(1);
+
+            // Remove the img tags and span tags, keeping only the text content
+            content = content.replaceAll("<img[^>]*>", ""); // Remove img tags
+            content = content.replaceAll("<span[^>]*>", "").replaceAll("</span>", ""); // Remove span tags
+
+            // Extract text sections with numbers
+            Pattern numberPattern = Pattern.compile("\\d+[^\\s]*");
+            Matcher numberMatcher = numberPattern.matcher(content);
+
+            StringBuilder result = new StringBuilder();
+
+            while (numberMatcher.find()) {
+                result.append(numberMatcher.group()).append(" ");
+            }
+
+            return result.toString().trim();
+        }
+
+        return "";
+    }
+    
+    /**
+     * Extracts ingredient names and their quantities from the given HTML.
+     *
+     * @param html valid HTML text
+     * @return a string containing the extracted ingredients and quantities
+     */
+    public static String extractIngredients(String html) {
+        StringBuilder result = new StringBuilder();
+        String regex = "<div class=\"ingre_list_name\">\\s*<a [^>]+>([^<]+)</a>\\s*</div>\\s*<span class=\"ingre_list_ea\">([^<]+)</span>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(html);
+
+        while (matcher.find()) {
+            String ingredient = matcher.group(1).trim();
+            String quantity = matcher.group(2).trim();
+            result.append(ingredient).append(" ").append(quantity).append("\n");
+        }
+
+        return result.toString().trim();
+    }
+
+
+    /**
+     * Extracts the steps and images from the given HTML.
+     *
+     * @param html valid HTML text
+     * @return a string containing the extracted steps and image URLs
+     */
+    public static String extractSteps(String html) {
+        int startIndex = html.indexOf("class=\"step_list st_thumb\"");
+        int endIndex = html.indexOf("class=\"reply_mn_tab\"");
+        if (startIndex != -1 && endIndex != -1) {
+            html = html.substring(startIndex, endIndex);
+        }
+
+        StringBuilder result = new StringBuilder();
+        String regexStep = "<li[^>]*>\\s*<div class=\"step_list_num\">.*?</div>\\s*<div class=\"step_list_txt\">\\s*<div class=\"step_list_txt_cont\">(.*?)</div>";
+
+        Pattern patternStep = Pattern.compile(regexStep, Pattern.DOTALL);
+        Matcher matcherStep = patternStep.matcher(html);
+
+        int stepNumber = 1;
+        List<String> steps = new ArrayList<>();
+
+        // Extract steps
+        while (matcherStep.find()) {
+            String stepText = matcherStep.group(1).trim();
+            stepText = stepText.replaceAll("<br\\s*/?>", "\n"); // Replace <br> tags with newlines
+
+            StringBuilder stepBuilder = new StringBuilder();
+            stepBuilder.append("Step ").append(stepNumber).append(":\n").append(stepText);
+
+            String stepWithLinks = stepBuilder.toString();
+            stepWithLinks = stripHtml(stepWithLinks); // Strip remaining HTML tags
+
+            steps.add(stepWithLinks); // Store each step
+            stepNumber++;
+        }
+
+        // Extract images
+        List<String> imageUrls = findImages(html);
+        for (int i = 0; i < steps.size(); i++) {
+            result.append(steps.get(i));
+            if (i < imageUrls.size()) {
+                result.append("\nLink: ").append(imageUrls.get(i));
+            }
+            result.append("\n\n"); // Add extra newline for step separation
+        }
+
+        System.out.println("Extracted steps:\n" + result.toString());
+
+        return result.toString().trim();
+    }
+
+    
+
+    /**
+     * Finds all image URLs on the given HTML page.
+     *
+     * @param html valid HTML text
+     * @return a list of image URLs found in the HTML
+     */
+    public static List<String> findImages(String html) {
+        List<String> imageUrls = new ArrayList<>();
+        String regexImage = "<img[^>]*src=[\"']([^\"']*)[\"'][^>]*>";
+
+        Pattern patternImage = Pattern.compile(regexImage, Pattern.DOTALL);
+        Matcher matcherImage = patternImage.matcher(html);
+
+        while (matcherImage.find()) {
+            String imageUrl = matcherImage.group(1).trim();
+            imageUrls.add(imageUrl);
+            System.out.println("Found image: " + imageUrl); // Debug: Print found image URL
+        }
+
+        return imageUrls;
+    }
 
 }

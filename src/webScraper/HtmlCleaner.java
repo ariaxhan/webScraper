@@ -335,7 +335,7 @@ public class HtmlCleaner {
             stepText = stepText.replaceAll("<br\\s*/?>", "\n"); // Replace <br> tags with newlines
 
             StringBuilder stepBuilder = new StringBuilder();
-            stepBuilder.append("Step ").append(stepNumber).append(":\n").append(stepText);
+            stepBuilder.append("Step ").append(stepNumber).append("\n").append(stepText);
 
             String stepWithLinks = stepBuilder.toString();
             stepWithLinks = stripHtml(stepWithLinks); // Strip remaining HTML tags

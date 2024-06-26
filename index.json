@@ -1,52 +1,91 @@
 {
-  "https://m.10000recipe.com/recipe/6865692": "
-Title: 깻잎순나물볶음 만드는 법 : 향긋하고 고소한 맛에 반했어요!
-1인분 15분
-깻잎순 3줌
-국간장 1큰술
-들기름 2-3큰술
-소금 적당량
-다진 마늘 1큰술
-통깨 적당량
-Step 1:
-깻잎순은 억센 줄기를 다듬어 준 다음에 흐르는 물에 깨끗이 씻어 체에 밭쳐 둡니다.
-
-(저는 줄기를 많이 다듬지는 않았어요.)
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/a3b25e1fb89f3a0c0908879fdb918acb1.jpg
-
-Step 2:
-끓는 물에 깻잎순을 넣고, 소금 1 티스푼을 넣어 3분가량 데쳐준 뒤 찬물에 헹궈 물기를 꾸욱 짜주세요.
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/e44199da8b22ee7eb7d534d3d36edcf71.jpg
-
-Step 3:
-그 많던 깻잎순은 어디로? 
-
-데쳐서 꾹 짜고 나니 깻잎순이 1/3로 줄어들었어요.
-
-허무함이 밀려오는군요 ㅋㅋㅋ
-
-다음에는 좀 넉넉하게 사 와서 만들어야겠어요-_-
-
-어쨌든 데쳐서 꾹 짜둔 깻잎순을 팬에 넣고, 국간장 1 큰 술과 들기름 2-3 큰 술을 넣고 조물조물 무쳐주세요.
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/abf6cd0207f21e7ec8cde62d41aea4e41.jpg
-
-Step 4:
-다진 마늘 1 큰 술도 넣고요.
-
-이제 중불에서 5분가량 깻잎순을 볶아줍니다.
-
-중간에 맛을 한 번 보고 소금 또는 국간장으로 간을 맞춰주세요 ^^
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/883cae4bf82b5e345594ffd9e0d1ea6e1.jpg
-
-Step 5:
-마지막으로 통깨를 촥촥 뿌려주기만 하면 깻잎순 나물볶음 완성!
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/b3cbf9e8258f8b99112bc6553a3bb0bb1.jpg
-
-Step 6:
-향긋하고 고소한 향이 물씬 나는 깻잎순 나물볶음에 따끈한 밥 한 그릇!
-
-정말 생각만으로도 침샘폭발 하지 않나요? ㅎㅎㅎㅎ
-
-오늘 저녁도 맛있게 잘 먹겠습니닷!
-Link: https://recipe1.ezmember.co.kr/cache/recipe/2017/02/22/3a01e0f05f367888007d5ae3ae4f06a31.jpg"
+  "https://m.10000recipe.com/recipe/6961294": {
+    "serving_size": "4인분",
+    "ingredients": [
+        "돼지고기 앞다리살 500g",
+        "배추김치 1쪽",
+        "대파 1개",
+        "청양고추 2개",
+        "물 800ml",
+        "된장 1수저",
+        "들기름 2수저",
+        "설탕 1/2수저",
+        "다진마늘 1수저",
+        "후추 2꼬집"
+      ],
+    "time": "30분",
+    "title": "돼지고기 김치찌개 달인이 되는 황금레시피",
+    "steps": [
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/f6e1d124d4c3c10c6205c5b5c49527381.jpg",
+          "description": "키친타올로 고기 핏물을 제거하고 먹기 좋은 크기로 숭덩숭덩 잘라주세요.",
+          "step": "Step 1"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/5b44a7849cc30e27c92b7a8a74c8ea371.jpg",
+          "description": "김치도 먹기 좋은 크기로 쫑쫑 썹니다.",
+          "step": "Step 2"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/5d3d04eed38be8dbfd74550cc9cf70bc1.jpg",
+          "description": "냄비에 들기름 2수저와 된장 1수저 넣고 수저로 섞어주세요.",
+          "step": "Step 3"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/635cb9edb465662669f01b7943fbcd1a1.jpg",
+          "description": "섞은 양념은 약불에서 짙은 갈색이 될때까지 볶아줍니다.",
+          "step": "Step 4"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/4d9277c9639d8169301880f5429e42281.jpg",
+          "description": "썰어놓은 고기와 설탕 1/2수저 넣고 중불로 올려 볶아주세요.",
+          "step": "Step 5"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/e0294c8837b6e1016ac6bd187cfbe1a71.jpg",
+          "description": "고기 겉면이 익을 때까지 잘 볶아주세요.",
+          "step": "Step 6"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/9eafebb734199de16886ed20bbe288e41.jpg",
+          "description": "썰어놓은 김치를 넣고 열심히 볶아주세요.",
+          "step": "Step 7"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/c8371ede348ea411ac274ce97d9624261.jpg",
+          "description": "양념과 수분이 다 졸아들 때까지만 볶으시면 됩니다.",
+          "step": "Step 8"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/23b90e8cc5bb8f7952e32495bfbde6a91.jpg",
+          "description": "물 800ml를 넣고 강불로 끓여주세요.",
+          "step": "Step 9"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/e24045201a7bfef3837c9469623dea761.jpg",
+          "description": "강불에서 팔팔 끓으면 뚜껑 덮고 약불로 줄여 20분간 끓여주세요.",
+          "step": "Step 10"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/2791a952f3a6697752d9319af22c52e31.jpg",
+          "description": "그동안 대파는 어슷썰고 청양고추는 송송 썰어주세요.",
+          "step": "Step 11"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/477e1eb74124d080a77ec78794c1f6181.jpg",
+          "description": "20분 뒤 불을 중불로 올린 뒤 다진마늘 1수저와 후추 2꼬집을 넣고 저어주세요.",
+          "step": "Step 12"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/beb34e66acd580c40c70dbe4f4bb02d61.jpg",
+          "description": "다시 팔팔 끓어오르기 시작하면 대파와 청양고추를 넣고 5분 더 끓여줍니다.",
+          "step": "Step 13"
+        },
+        {
+          "link": "https://recipe1.ezmember.co.kr/cache/recipe/2021/07/06/b0f950b497d6d5b15d13afefcf7138d71.jpg",
+          "description": "모든 재료가 푹 익으면 완성입니다. 김치찌개는 오래 끓여먹어도 맛있으니 취향대로 더 끓여서 드셔도 됩니다.",
+          "step": "Step 14"
+        }
+      ]
+  }
 }

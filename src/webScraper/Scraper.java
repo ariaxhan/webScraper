@@ -34,7 +34,7 @@ public class Scraper {
      */
     public void writeIndex(Path indexPath) {
         try {
-            index.writeInverted(indexPath);
+            JsonWriter.writeObject(index.getHtmlContentMap(), indexPath);
         } catch (IOException e) {
             System.err.println("Unable to write index to file: " + indexPath);
         }
@@ -55,7 +55,7 @@ public class Scraper {
 
             scraper.buildWebCrawl(seedUrl, totalPages);
 
-            // Optionally, write the index to a file
+            // Write the index to a file
             Path indexPath = Path.of("index.json");
             scraper.writeIndex(indexPath);
 

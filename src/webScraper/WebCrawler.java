@@ -36,14 +36,16 @@ public class WebCrawler {
         List<String> hyperlinks = HtmlCleaner.extractHyperlinks(html);
 
         for (String link : hyperlinks) {
-            try {
-                URI linkUri = new URI(link);
-                if (!linkUri.isAbsolute()) {
-                    linkUri = uri.resolve(linkUri);
+            if (link.contains("/recipe")) { // Check if the link contains "/recipe"
+                try {
+                    URI linkUri = new URI(link);
+                    if (!linkUri.isAbsolute()) {
+                        linkUri = uri.resolve(linkUri);
+                    }
+                    crawl(linkUri, index, totalPages);
+                } catch (URISyntaxException e) {
+                    System.out.println("Invalid URI syntax: " + link);
                 }
-                crawl(linkUri, index, totalPages);
-            } catch (URISyntaxException e) {
-                System.out.println("Invalid URI syntax: " + link);
             }
         }
     }
